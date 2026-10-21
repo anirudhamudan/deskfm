@@ -3,13 +3,13 @@
 <plist version="1.0">
 <dict>
     <key>CFBundleName</key>
-    <string>Spotbar</string>
+    <string>Desk FM</string>
     <key>CFBundleDisplayName</key>
-    <string>Spotbar</string>
+    <string>Desk FM</string>
     <key>CFBundleIdentifier</key>
-    <string>local.anirudh.spotbar</string>
+    <string>com.anirudhamudan.deskfm</string>
     <key>CFBundleExecutable</key>
-    <string>Spotbar</string>
+    <string>DeskFM</string>
     <key>CFBundlePackageType</key>
     <string>APPL</string>
     <key>CFBundleShortVersionString</key>
@@ -25,6 +25,6 @@
     <key>LSUIElement</key>
     <true/>
     <key>NSAppleEventsUsageDescription</key>
-    <string>Spotbar controls Spotify playback and reads the current track.</string>
+    <string>Desk FM controls Spotify playback and reads the current track.</string>
 </dict>
 </plist>

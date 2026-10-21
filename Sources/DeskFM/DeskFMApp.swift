@@ -2,14 +2,14 @@ import ServiceManagement
 import SwiftUI
 
 @main
-struct SpotbarApp: App {
+struct DeskFMApp: App {
     @NSApplicationDelegateAdaptor private var appDelegate: AppDelegate
     @StateObject private var spotify = SpotifyController()
 
     init() {
         // `build.sh --install` launches with this flag to turn on launch at login.
         if CommandLine.arguments.contains("--enable-login-item") {
-            do { try SMAppService.mainApp.register() } catch { NSLog("Spotbar launch-at-login error: \(error)") }
+            do { try SMAppService.mainApp.register() } catch { NSLog("Desk FM launch-at-login error: \(error)") }
         }
     }
 
@@ -139,9 +139,9 @@ struct PopoverView: View {
 
     private var permissionNeeded: some View {
         VStack(alignment: .leading, spacing: 10) {
-            Label("Spotbar can't control Spotify", systemImage: "lock")
+            Label("Desk FM can't control Spotify", systemImage: "lock")
                 .font(.headline)
-            Text("Turn on Spotify under Spotbar in System Settings → Privacy & Security → Automation.")
+            Text("Turn on Spotify under Desk FM in System Settings → Privacy & Security → Automation.")
                 .font(.caption).foregroundStyle(.secondary)
                 .fixedSize(horizontal: false, vertical: true)
             HStack {
@@ -156,7 +156,7 @@ struct PopoverView: View {
     private var notInstalled: some View {
         VStack(spacing: 10) {
             Text("Spotify isn't installed").font(.headline)
-            Text("Spotbar controls the Spotify desktop app.")
+            Text("Desk FM controls the Spotify desktop app.")
                 .font(.caption).foregroundStyle(.secondary)
             Link("Download Spotify", destination: URL(string: "https://www.spotify.com/download/mac/")!)
         }
@@ -218,7 +218,7 @@ struct PopoverView: View {
                 Toggle("Launch at login", isOn: $launchAtLogin)
                     .onChange(of: launchAtLogin) { _, on in setLaunchAtLogin(on) }
                 Divider()
-                Button("Quit Spotbar") { NSApp.terminate(nil) }
+                Button("Quit Desk FM") { NSApp.terminate(nil) }
             } label: {
                 Image(systemName: "gearshape")
             }
@@ -258,7 +258,7 @@ struct PopoverView: View {
         do {
             if on { try SMAppService.mainApp.register() } else { try SMAppService.mainApp.unregister() }
         } catch {
-            NSLog("Spotbar launch-at-login error: \(error)")
+            NSLog("Desk FM launch-at-login error: \(error)")
             launchAtLogin = SMAppService.mainApp.status == .enabled
         }
     }

@@ -261,8 +261,8 @@ final class SpotifyController: ObservableObject {
         var error: NSDictionary?
         let result = NSAppleScript(source: source)?.executeAndReturnError(&error)
         if let error {
-            NSLog("Spotbar AppleScript error: \(error)")
-            // -1743: the user denied Spotbar permission to control Spotify.
+            NSLog("Desk FM AppleScript error: \(error)")
+            // -1743: the user denied Desk FM permission to control Spotify.
             if (error[NSAppleScript.errorNumber] as? Int) == -1743 { needsPermission = true }
             return nil
         }

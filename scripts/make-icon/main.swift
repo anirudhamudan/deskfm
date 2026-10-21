@@ -1,5 +1,5 @@
 // Renders the app icon to an .iconset folder. Compiled together with LampGlyph.swift by build.sh:
-//   swiftc Sources/Spotbar/LampGlyph.swift scripts/make-icon/main.swift -o <tool> && <tool> <out.iconset>
+//   swiftc Sources/DeskFM/LampGlyph.swift scripts/make-icon/main.swift -o <tool> && <tool> <out.iconset>
 import AppKit
 
 func renderIcon(pixels: Int) -> NSBitmapImageRep {
@@ -17,7 +17,7 @@ func renderIcon(pixels: Int) -> NSBitmapImageRep {
                ending: NSColor(srgbRed: 0.09, green: 0.10, blue: 0.12, alpha: 1))!
         .draw(in: tilePath, angle: -90)
 
-    LampGlyph.draw(in: tile.insetBy(dx: 90 * s, dy: 90 * s),
+    LampGlyph.draw(in: tile.insetBy(dx: 70 * s, dy: 70 * s),
                    lamp: NSColor(srgbRed: 0.95, green: 0.93, blue: 0.89, alpha: 1),
                    light: NSColor(srgbRed: 1.0, green: 0.76, blue: 0.29, alpha: 1))
 

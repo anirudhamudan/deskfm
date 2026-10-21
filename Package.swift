@@ -2,9 +2,9 @@
 import PackageDescription
 
 let package = Package(
-    name: "Spotbar",
+    name: "DeskFM",
     platforms: [.macOS(.v14)],
     targets: [
-        .executableTarget(name: "Spotbar", path: "Sources/Spotbar")
+        .executableTarget(name: "DeskFM", path: "Sources/DeskFM")
     ]
 )

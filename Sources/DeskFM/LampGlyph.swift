@@ -1,10 +1,10 @@
 import AppKit
 
-/// Spotbar's mark: a desk lamp throwing three rays of light — the thing you switch on
-/// when you sit down to focus. Shared by the menu bar icon and scripts/make-icon.
+/// Desk FM's mark: a desk lamp whose glow is three sound waves — light for working,
+/// sound for the music. Shared by the menu bar icon and scripts/make-icon.
 enum LampGlyph {
     /// Drawn on a 24×24 grid with y pointing down, then fitted into `rect`.
-    /// `lamp` colours the base, arm and shade; `light` colours the rays.
+    /// `lamp` colours the base, arm and shade; `light` colours the sound waves.
     static func draw(in rect: NSRect, lamp: NSColor, light: NSColor) {
         let d = CGPoint(x: 0.7071, y: 0.7071)   // shade axis, pointing down-right
         let p = CGPoint(x: 0.7071, y: -0.7071)  // perpendicular to it
@@ -38,21 +38,21 @@ enum LampGlyph {
         shade.lineWidth = 1.2
         shade.lineJoinStyle = .round
 
-        // Three rays fanning out of the opening.
-        func ray(offset: CGFloat, angle: CGFloat, length: CGFloat) -> NSBezierPath {
-            let start = pt(mouth, 2.6, along: d, offset, along: p)
-            let dir = CGPoint(x: cos(angle * .pi / 180), y: sin(angle * .pi / 180))
-            return stroked([start, pt(start, length, along: dir)], width: 1.5)
+        // Three sound waves spreading out of the opening, centred just inside it.
+        let source = pt(mouth, -1.0, along: d)
+        let rays: [NSBezierPath] = [4.4, 7.1, 9.8].map { radius in
+            let wave = NSBezierPath()
+            wave.appendArc(withCenter: source, radius: radius, startAngle: 12, endAngle: 78)
+            wave.lineWidth = 1.5
+            wave.lineCapStyle = .round
+            return wave
         }
-        let rays = [ray(offset: 3.4, angle: 8, length: 2.8),
-                    ray(offset: 0, angle: 45, length: 3.0),
-                    ray(offset: -3.4, angle: 82, length: 2.8)]
 
         // Fit the 24-grid drawing (y down) into rect (y up), centred.
         var t = AffineTransform()
         t.translate(x: rect.minX, y: rect.maxY)
         t.scale(x: rect.width / 24, y: -rect.height / 24)
-        t.translate(x: 1.6, y: -2.0)            // centre the artwork in the grid
+        t.translate(x: 0.8, y: -0.9)            // centre the artwork in the grid
         for path in [base, arm, shade] + rays {
             path.transform(using: t)
             path.lineWidth *= rect.width / 24     // transforms don't scale stroke widths
