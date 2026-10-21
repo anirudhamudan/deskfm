@@ -58,8 +58,9 @@ final class PanelController: NSObject {
         } else {
             glass.addSubview(hosting)
         }
-        // Thin rounded outline, like the system panel's edge.
-        let outline = NSView()
+        // Thin rounded outline, like the system panel's edge. It sits on top of the
+        // content, so it must let clicks through.
+        let outline = PassThroughView()
         outline.wantsLayer = true
         outline.layer?.cornerRadius = 13
         outline.layer?.borderWidth = 0.5
@@ -188,4 +189,9 @@ private struct PanelRoot: View {
     var body: some View {
         PopoverView(spotify: spotify, model: model, holdOpen: holdOpen).fixedSize()
     }
+}
+
+/// A purely decorative view that never takes clicks.
+private final class PassThroughView: NSView {
+    override func hitTest(_ point: NSPoint) -> NSView? { nil }
 }
