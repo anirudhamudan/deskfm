@@ -4,7 +4,6 @@ import SwiftUI
 @main
 struct DeskFMApp: App {
     @NSApplicationDelegateAdaptor private var appDelegate: AppDelegate
-    @StateObject private var spotify = SpotifyController()
 
     init() {
         // `build.sh --install` launches with this flag to turn on launch at login.
@@ -13,18 +12,21 @@ struct DeskFMApp: App {
         }
     }
 
+    // The menu bar item and its panel are AppKit (see PanelController), because
+    // SwiftUI's MenuBarExtra always closes when the app loses focus — including
+    // the moment Spotify brings itself forward after Start.
     var body: some Scene {
-        MenuBarExtra {
-            PopoverView(spotify: spotify)
-        } label: {
-            Image(nsImage: LampGlyph.menuBarImage)
-        }
-        .menuBarExtraStyle(.window)
+        Settings { EmptyView() }
     }
 }
 
 final class AppDelegate: NSObject, NSApplicationDelegate {
+    private var panelController: PanelController?
+
+    @MainActor
     func applicationDidFinishLaunching(_ notification: Notification) {
+        panelController = PanelController(spotify: SpotifyController())
+
         // Menu bar apps have no Edit menu, so ⌘C/⌘V/⌘A do nothing in text fields
         // without one. It's never shown; it only provides the key equivalents.
         let edit = NSMenu(title: "Edit")
@@ -40,12 +42,19 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     }
 }
 
+/// Panel state shared with PanelController, so Esc can close the editor before the panel.
+final class PanelModel: ObservableObject {
+    @Published var editingFocus = false
+}
+
 struct PopoverView: View {
     @ObservedObject var spotify: SpotifyController
+    @ObservedObject var model: PanelModel
+    /// Called right before starting playback that can make Spotify jump to the front.
+    var holdOpen: () -> Void = {}
     @AppStorage("focusURI") private var focusURI = "spotify:playlist:37i9dQZF1DWZeKCadgRdKQ"
     @AppStorage("focusName") private var focusName = "Deep Focus"
     @State private var launchAtLogin = SMAppService.mainApp.status == .enabled
-    @State private var editingFocus = false
     @State private var linkDraft = ""
     @State private var nameDraft = ""
     @State private var linkError: String?
@@ -64,14 +73,13 @@ struct PopoverView: View {
                 } else {
                     notRunning
                 }
-                if editingFocus { focusEditor } else { focusButton }
+                if model.editingFocus { focusEditor } else { focusButton }
             }
             Divider()
             footer
         }
         .padding(14)
         .frame(width: 300)
-        .onAppear { spotify.refresh() }
     }
 
     private func nowPlaying(_ track: Track) -> some View {
@@ -105,7 +113,7 @@ struct PopoverView: View {
                 Image(systemName: spotify.state == .playing ? "pause.circle.fill" : "play.circle.fill")
                     .font(.system(size: 38))
             }
-            .keyboardShortcut(editingFocus ? nil : KeyboardShortcut(.space, modifiers: []))
+            .keyboardShortcut(model.editingFocus ? nil : KeyboardShortcut(.space, modifiers: []))
             Button(action: spotify.next) { Image(systemName: "forward.fill") }
             Button(action: spotify.openSpotify) {
                 Image(systemName: "arrow.up.forward.app").foregroundStyle(.secondary)
@@ -118,7 +126,7 @@ struct PopoverView: View {
     }
 
     private var focusButton: some View {
-        Button { spotify.play(uri: focusURI) } label: {
+        Button { holdOpen(); spotify.play(uri: focusURI) } label: {
             Label("Start \(focusName)", systemImage: "headphones")
                 .frame(maxWidth: .infinity)
         }
@@ -130,8 +138,8 @@ struct PopoverView: View {
     private var notRunning: some View {
         VStack(spacing: 10) {
             Text("Spotify isn't running").font(.headline)
-            Button("Resume last track") { spotify.playPause() }
-                .keyboardShortcut(editingFocus ? nil : .defaultAction)
+            Button("Resume last track") { holdOpen(); spotify.playPause() }
+                .keyboardShortcut(model.editingFocus ? nil : .defaultAction)
         }
         .frame(maxWidth: .infinity)
         .padding(.vertical, 8)
@@ -199,7 +207,7 @@ struct PopoverView: View {
 
             HStack {
                 Spacer()
-                Button("Cancel") { editingFocus = false }
+                Button("Cancel") { model.editingFocus = false }
                     .keyboardShortcut(.cancelAction)
                 Button("Save", action: saveFocus)
                     .keyboardShortcut(.defaultAction)
@@ -240,7 +248,7 @@ struct PopoverView: View {
         }
         nameDraft = focusName
         linkError = nil
-        editingFocus = true
+        model.editingFocus = true
     }
 
     private func saveFocus() {
@@ -251,7 +259,7 @@ struct PopoverView: View {
         focusURI = uri
         let name = nameDraft.trimmingCharacters(in: .whitespaces)
         if !name.isEmpty { focusName = name }
-        editingFocus = false
+        model.editingFocus = false
     }
 
     private func setLaunchAtLogin(_ on: Bool) {
