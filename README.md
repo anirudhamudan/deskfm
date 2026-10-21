@@ -1,12 +1,12 @@
 # Desk FM
 
-A radio station for your desk: Spotify controls that never leave your Mac's menu bar,
-and one click to start your focus playlist.
+I listen to the same lo-fi playlist every time I sit down to work. But whenever I
+paused Spotify for a while, the Now Playing widget on my Mac would disappear, the play
+key would open Apple Music instead, and I'd end up hunting for Spotify in the Dock just
+to press play.
 
-I kept losing the Now Playing widget: after Spotify has been paused for a while, macOS
-forgets it, the widget disappears, and the play key opens Apple Music instead. Then
-it's a trip to the Dock just to hit play. Desk FM talks to the Spotify app directly, so
-the controls are always one click away no matter what macOS thinks is "now playing".
+So I made myself a small lamp that lives in the menu bar and never goes away, with one
+button that starts my focus music. That's all it is. If it helps you too, great.
 
 ## Features
 
