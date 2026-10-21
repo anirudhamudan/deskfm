@@ -8,6 +8,8 @@ to press play.
 So I made myself a small lamp that lives in the menu bar and never goes away, with one
 button that starts my focus music. That's all it is. If it helps you too, great.
 
+<img src="docs/screenshot.png" alt="Desk FM's panel open under the lamp in the menu bar, playing a track" width="410">
+
 ## Features
 
 - A little desk lamp in your menu bar that never goes away
