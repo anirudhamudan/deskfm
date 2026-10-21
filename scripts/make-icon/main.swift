@@ -1,5 +1,5 @@
-// Renders the app icon to an .iconset folder. Compiled together with PinGlyph.swift by build.sh:
-//   swiftc Sources/Spotbar/PinGlyph.swift scripts/make-icon/main.swift -o <tool> && <tool> <out.iconset>
+// Renders the app icon to an .iconset folder. Compiled together with LampGlyph.swift by build.sh:
+//   swiftc Sources/Spotbar/LampGlyph.swift scripts/make-icon/main.swift -o <tool> && <tool> <out.iconset>
 import AppKit
 
 func renderIcon(pixels: Int) -> NSBitmapImageRep {
@@ -17,11 +17,9 @@ func renderIcon(pixels: Int) -> NSBitmapImageRep {
                ending: NSColor(srgbRed: 0.09, green: 0.10, blue: 0.12, alpha: 1))!
         .draw(in: tilePath, angle: -90)
 
-    let pinRect = tile.insetBy(dx: 115 * s, dy: 115 * s)
-    let pin = PinGlyph.path(in: pinRect)
-    NSGradient(starting: NSColor(srgbRed: 1.0, green: 0.42, blue: 0.36, alpha: 1),
-               ending: NSColor(srgbRed: 0.86, green: 0.22, blue: 0.24, alpha: 1))!
-        .draw(in: pin, angle: -90)
+    LampGlyph.draw(in: tile.insetBy(dx: 90 * s, dy: 90 * s),
+                   lamp: NSColor(srgbRed: 0.95, green: 0.93, blue: 0.89, alpha: 1),
+                   light: NSColor(srgbRed: 1.0, green: 0.76, blue: 0.29, alpha: 1))
 
     NSGraphicsContext.restoreGraphicsState()
     return rep

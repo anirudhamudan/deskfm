@@ -11,10 +11,10 @@ VERSION=$(/usr/libexec/PlistBuddy -c "Print CFBundleShortVersionString" Resource
 swift build -c release --arch arm64 --arch x86_64
 BIN=$(swift build -c release --arch arm64 --arch x86_64 --show-bin-path)/Spotbar
 
-# App icon, drawn from the same pin as the menu bar icon.
+# App icon, drawn from the same lamp as the menu bar icon.
 ICONWORK=.build/icon
 mkdir -p "$ICONWORK"
-swiftc -O Sources/Spotbar/PinGlyph.swift scripts/make-icon/main.swift -o "$ICONWORK/make-icon"
+swiftc -O Sources/Spotbar/LampGlyph.swift scripts/make-icon/main.swift -o "$ICONWORK/make-icon"
 rm -rf "$ICONWORK/AppIcon.iconset"
 "$ICONWORK/make-icon" "$ICONWORK/AppIcon.iconset"
 

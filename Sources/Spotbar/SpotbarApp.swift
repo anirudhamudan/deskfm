@@ -17,7 +17,7 @@ struct SpotbarApp: App {
         MenuBarExtra {
             PopoverView(spotify: spotify)
         } label: {
-            Image(nsImage: PinGlyph.menuBarImage)
+            Image(nsImage: LampGlyph.menuBarImage)
         }
         .menuBarExtraStyle(.window)
     }
