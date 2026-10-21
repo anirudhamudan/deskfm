@@ -6,13 +6,17 @@ enum LampGlyph {
     /// Drawn on a 24×24 grid with y pointing down, then fitted into `rect`.
     /// `lamp` colours the base, arm and shade; `light` colours the sound waves.
     static func draw(in rect: NSRect, lamp: NSColor, light: NSColor) {
-        let d = CGPoint(x: 0.7071, y: 0.7071)   // shade axis, pointing down-right
-        let p = CGPoint(x: 0.7071, y: -0.7071)  // perpendicular to it
-        func pt(_ base: CGPoint, _ a: CGFloat, along v: CGPoint, _ b: CGFloat = 0, along w: CGPoint = .zero) -> CGPoint {
-            CGPoint(x: base.x + a * v.x + b * w.x, y: base.y + a * v.y + b * w.y)
+        // The shade points right and a little down; the waves are centred on that
+        // beam, so they spread to the right and stay well clear of the base.
+        let beam: CGFloat = 30                  // degrees below horizontal
+        let rad = beam * .pi / 180
+        let d = CGPoint(x: cos(rad), y: sin(rad))   // shade axis
+        let p = CGPoint(x: sin(rad), y: -cos(rad))  // perpendicular to it
+        func pt(_ base: CGPoint, _ a: CGFloat, along v: CGPoint) -> CGPoint {
+            CGPoint(x: base.x + a * v.x, y: base.y + a * v.y)
         }
-        let back = CGPoint(x: 6.5, y: 6.5)      // where the arm meets the shade
-        let mouth = CGPoint(x: 11, y: 11)       // centre of the shade's opening
+        let back = CGPoint(x: 8, y: 6)          // narrow end of the shade
+        let mouth = pt(back, 4.6, along: d)     // centre of the shade's opening
 
         func stroked(_ points: [CGPoint], width: CGFloat) -> NSBezierPath {
             let path = NSBezierPath()
@@ -24,25 +28,25 @@ enum LampGlyph {
             return path
         }
 
-        // Base and two-segment arm.
-        let base = stroked([CGPoint(x: 3, y: 21), CGPoint(x: 11, y: 21)], width: 2.4)
-        let arm = stroked([CGPoint(x: 6, y: 21), CGPoint(x: 3.8, y: 13.5), back], width: 2.2)
+        // Base and two-segment arm: down-left to the elbow, then up into the shade.
+        let base = stroked([CGPoint(x: 3, y: 20), CGPoint(x: 11, y: 20)], width: 2.4)
+        let arm = stroked([CGPoint(x: 7, y: 20), CGPoint(x: 4.4, y: 12.6), pt(back, 0.9, along: d)], width: 2.2)
 
-        // Shade: a cone, narrow at the back and open towards the light.
+        // Shade: a cone, narrow at the back and open towards the beam.
         let shade = NSBezierPath()
-        shade.move(to: pt(back, 1.5, along: p))
-        shade.line(to: pt(mouth, 3.7, along: p))
-        shade.line(to: pt(mouth, -3.7, along: p))
-        shade.line(to: pt(back, -1.5, along: p))
+        shade.move(to: pt(back, 1.4, along: p))
+        shade.line(to: pt(mouth, 3.4, along: p))
+        shade.line(to: pt(mouth, -3.4, along: p))
+        shade.line(to: pt(back, -1.4, along: p))
         shade.close()
         shade.lineWidth = 1.2
         shade.lineJoinStyle = .round
 
-        // Three sound waves spreading out of the opening, centred just inside it.
-        let source = pt(mouth, -1.0, along: d)
-        let rays: [NSBezierPath] = [4.4, 7.1, 9.8].map { radius in
+        // Three sound waves, evenly spaced and symmetric around the beam.
+        let source = pt(mouth, -0.8, along: d)
+        let rays: [NSBezierPath] = [3.7, 6.0, 8.3].map { radius in
             let wave = NSBezierPath()
-            wave.appendArc(withCenter: source, radius: radius, startAngle: 12, endAngle: 78)
+            wave.appendArc(withCenter: source, radius: radius, startAngle: beam - 34, endAngle: beam + 34)
             wave.lineWidth = 1.5
             wave.lineCapStyle = .round
             return wave
@@ -52,7 +56,7 @@ enum LampGlyph {
         var t = AffineTransform()
         t.translate(x: rect.minX, y: rect.maxY)
         t.scale(x: rect.width / 24, y: -rect.height / 24)
-        t.translate(x: 0.8, y: -0.9)            // centre the artwork in the grid
+        t.translate(x: 0.6, y: -0.6)            // centre the artwork in the grid
         for path in [base, arm, shade] + rays {
             path.transform(using: t)
             path.lineWidth *= rect.width / 24     // transforms don't scale stroke widths

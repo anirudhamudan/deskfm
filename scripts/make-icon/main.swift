@@ -13,13 +13,18 @@ func renderIcon(pixels: Int) -> NSBitmapImageRep {
     // macOS icon grid: 824pt rounded square centred on a 1024 canvas.
     let tile = NSRect(x: 100 * s, y: 100 * s, width: 824 * s, height: 824 * s)
     let tilePath = NSBezierPath(roundedRect: tile, xRadius: 185 * s, yRadius: 185 * s)
-    NSGradient(starting: NSColor(srgbRed: 0.17, green: 0.18, blue: 0.22, alpha: 1),
-               ending: NSColor(srgbRed: 0.09, green: 0.10, blue: 0.12, alpha: 1))!
+    // "Paper": cream tile, slate lamp, orange sound waves.
+    NSGradient(starting: NSColor(srgbRed: 0.94, green: 0.89, blue: 0.82, alpha: 1),   // #EFE4D2
+               ending: NSColor(srgbRed: 0.90, green: 0.85, blue: 0.77, alpha: 1))!
         .draw(in: tilePath, angle: -90)
+    // A faint edge so the light tile doesn't dissolve into white windows.
+    NSColor(srgbRed: 0.18, green: 0.28, blue: 0.35, alpha: 0.12).setStroke()
+    tilePath.lineWidth = 4 * s
+    tilePath.stroke()
 
     LampGlyph.draw(in: tile.insetBy(dx: 70 * s, dy: 70 * s),
-                   lamp: NSColor(srgbRed: 0.95, green: 0.93, blue: 0.89, alpha: 1),
-                   light: NSColor(srgbRed: 1.0, green: 0.76, blue: 0.29, alpha: 1))
+                   lamp: NSColor(srgbRed: 0.18, green: 0.28, blue: 0.35, alpha: 1),    // #2F4858
+                   light: NSColor(srgbRed: 0.89, green: 0.41, blue: 0.29, alpha: 1))   // #E2694A
 
     NSGraphicsContext.restoreGraphicsState()
     return rep
