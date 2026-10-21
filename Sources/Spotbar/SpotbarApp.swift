@@ -17,7 +17,7 @@ struct SpotbarApp: App {
         MenuBarExtra {
             PopoverView(spotify: spotify)
         } label: {
-            Image(nsImage: SpotifyGlyph.image)
+            Image(nsImage: PinGlyph.menuBarImage)
         }
         .menuBarExtraStyle(.window)
     }
@@ -52,14 +52,20 @@ struct PopoverView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
-            if let track = spotify.track, spotify.state != .notRunning {
-                nowPlaying(track)
-                ProgressBar(spotify: spotify, duration: track.duration)
-                controls
+            if spotify.needsPermission {
+                permissionNeeded
+            } else if spotify.state == .notInstalled {
+                notInstalled
             } else {
-                notRunning
+                if let track = spotify.track, spotify.state != .notRunning {
+                    nowPlaying(track)
+                    ProgressBar(spotify: spotify, duration: track.duration)
+                    controls
+                } else {
+                    notRunning
+                }
+                if editingFocus { focusEditor } else { focusButton }
             }
-            if editingFocus { focusEditor } else { focusButton }
             Divider()
             footer
         }
@@ -82,7 +88,7 @@ struct PopoverView: View {
 
             VStack(alignment: .leading, spacing: 2) {
                 Text(track.name).font(.headline).lineLimit(1)
-                Text("\(track.artist) · \(track.album)")
+                Text([track.artist, track.album].filter { !$0.isEmpty }.joined(separator: " · "))
                     .font(.subheadline).foregroundStyle(.secondary).lineLimit(1)
             }
         }
@@ -99,7 +105,7 @@ struct PopoverView: View {
                 Image(systemName: spotify.state == .playing ? "pause.circle.fill" : "play.circle.fill")
                     .font(.system(size: 38))
             }
-            .keyboardShortcut(.space, modifiers: [])
+            .keyboardShortcut(editingFocus ? nil : KeyboardShortcut(.space, modifiers: []))
             Button(action: spotify.next) { Image(systemName: "forward.fill") }
             Button(action: spotify.openSpotify) {
                 Image(systemName: "arrow.up.forward.app").foregroundStyle(.secondary)
@@ -125,7 +131,34 @@ struct PopoverView: View {
         VStack(spacing: 10) {
             Text("Spotify isn't running").font(.headline)
             Button("Resume last track") { spotify.playPause() }
-                .keyboardShortcut(.defaultAction)
+                .keyboardShortcut(editingFocus ? nil : .defaultAction)
+        }
+        .frame(maxWidth: .infinity)
+        .padding(.vertical, 8)
+    }
+
+    private var permissionNeeded: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            Label("Spotbar can't control Spotify", systemImage: "lock")
+                .font(.headline)
+            Text("Turn on Spotify under Spotbar in System Settings → Privacy & Security → Automation.")
+                .font(.caption).foregroundStyle(.secondary)
+                .fixedSize(horizontal: false, vertical: true)
+            HStack {
+                Button("Open System Settings", action: spotify.openAutomationSettings)
+                    .buttonStyle(.borderedProminent)
+                Button("Try again", action: spotify.refresh)
+            }
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+    }
+
+    private var notInstalled: some View {
+        VStack(spacing: 10) {
+            Text("Spotify isn't installed").font(.headline)
+            Text("Spotbar controls the Spotify desktop app.")
+                .font(.caption).foregroundStyle(.secondary)
+            Link("Download Spotify", destination: URL(string: "https://www.spotify.com/download/mac/")!)
         }
         .frame(maxWidth: .infinity)
         .padding(.vertical, 8)
