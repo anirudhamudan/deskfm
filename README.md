@@ -2,11 +2,15 @@
 
 I listen to the same lo-fi playlist every time I sit down to work. But whenever I
 paused Spotify for a while, the Now Playing widget on my Mac would disappear, the play
-key would open Apple Music instead, and I'd end up hunting for Spotify in the Dock just
-to press play.
+key on the keyboard would open Apple Music instead, and I'd end up hunting for Spotify,
+opening it and searching for the playlist just to press play.
+
+It was the same when I'd been listening to something else on my way to the office.
+Sitting down meant finding the playlist all over again before I could start working.
 
 So I made myself a small lamp that lives in the menu bar and never goes away, with one
-button that starts my focus music. That's all it is. If it helps you too, great.
+button that starts my focus music, whatever was playing before. That's all it is. If
+it helps you too, great.
 
 <img src="docs/demo.gif" alt="Clicking the lamp in the menu bar, then Start Deep Focus: the paused song switches to a focus track and starts playing" width="480">
 
