@@ -5,8 +5,8 @@ paused Spotify for a while, the Now Playing widget on my Mac would disappear, th
 key on the keyboard would open Apple Music instead, and I'd end up hunting for Spotify,
 opening it and searching for the playlist just to press play.
 
-It was the same when I'd been listening to something else on my way to the office.
-Sitting down meant finding the playlist all over again before I could start working.
+It was the same when I'd been listening to something else on my way to the office:
+sitting down > opening Spotify > finding the playlist > hitting play.
 
 So I made myself a small lamp that lives in the menu bar and never goes away, with one
 button that starts my focus music, whatever was playing before. That's all it is. If
