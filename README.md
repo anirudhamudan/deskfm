@@ -8,7 +8,7 @@ to press play.
 So I made myself a small lamp that lives in the menu bar and never goes away, with one
 button that starts my focus music. That's all it is. If it helps you too, great.
 
-<img src="docs/screenshot.png" alt="Desk FM's panel open under the lamp in the menu bar, playing a track" width="410">
+<img src="docs/demo.gif" alt="Clicking the lamp in the menu bar, then Start Deep Focus: the paused song switches to a focus track and starts playing" width="480">
 
 ## Features
 

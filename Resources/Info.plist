@@ -2,29 +2,29 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-    <key>CFBundleName</key>
-    <string>Desk FM</string>
-    <key>CFBundleDisplayName</key>
-    <string>Desk FM</string>
-    <key>CFBundleIdentifier</key>
-    <string>com.anirudhamudan.deskfm</string>
-    <key>CFBundleExecutable</key>
-    <string>DeskFM</string>
-    <key>CFBundlePackageType</key>
-    <string>APPL</string>
-    <key>CFBundleShortVersionString</key>
-    <string>1.0.0</string>
-    <key>CFBundleVersion</key>
-    <string>1</string>
-    <key>CFBundleIconFile</key>
-    <string>AppIcon</string>
-    <key>NSHumanReadableCopyright</key>
-    <string>© 2026 Anirudh Amudan. MIT License.</string>
-    <key>LSMinimumSystemVersion</key>
-    <string>14.0</string>
-    <key>LSUIElement</key>
-    <true/>
-    <key>NSAppleEventsUsageDescription</key>
-    <string>Desk FM controls Spotify playback and reads the current track.</string>
+	<key>CFBundleDisplayName</key>
+	<string>Desk FM</string>
+	<key>CFBundleExecutable</key>
+	<string>DeskFM</string>
+	<key>CFBundleIconFile</key>
+	<string>AppIcon</string>
+	<key>CFBundleIdentifier</key>
+	<string>com.anirudhamudan.deskfm</string>
+	<key>CFBundleName</key>
+	<string>Desk FM</string>
+	<key>CFBundlePackageType</key>
+	<string>APPL</string>
+	<key>CFBundleShortVersionString</key>
+	<string>1.0.1</string>
+	<key>CFBundleVersion</key>
+	<string>2</string>
+	<key>LSMinimumSystemVersion</key>
+	<string>14.0</string>
+	<key>LSUIElement</key>
+	<true/>
+	<key>NSAppleEventsUsageDescription</key>
+	<string>Desk FM controls Spotify playback and reads the current track.</string>
+	<key>NSHumanReadableCopyright</key>
+	<string>© 2026 Anirudh Amudan. MIT License.</string>
 </dict>
 </plist>
